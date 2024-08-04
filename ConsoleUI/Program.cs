@@ -1,9 +1,11 @@
 ﻿using Business.Concrete;
+using DataAccess.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemoryDal;
 using Entities.Concrete;
 using System;
 using System.ComponentModel;
+using System.Linq;
 
 namespace ConsoleUI
 {

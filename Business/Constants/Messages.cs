@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,7 +12,8 @@ namespace Business.Constants
         public static string CarUpdated = "Car is successfully updated";
         public static string CarInvalid = "Car name must have at least 2 char and daily price must be higher than 0";
         public static string CarsListed = "Cars are listed.";
-
+        public static string CarCategoryLimitExceeded = "Kategori limiti aşıldı.";
+        public static string AuthorizationDenied = "Yetkiniz yok.";
 
         public static string ColorAdded = "Color is successfully added";
         public static string ColorDeleted = "Color is successfully deleted";
@@ -28,6 +30,14 @@ namespace Business.Constants
         public static string UserDeleted = "User is successfully deleted";
         public static string UserUpdated = "User is successfully updated";
         public static string UsersListed = "Users are listed.";
+        public static string UserRegistered = "User is registered";
+        public static User UserNotFound;
+        public static User PasswordError;
+        public static string SuccessfulLogin = "Logged in successfully.";
+        public static string UserAlreadyExists = "User Already Exists";
+        public static string AccessTokenCreated = "Access Token is created";
+
+
 
         public static string CustomerAdded = "Customer is successfully added";
         public static string CustomerDeleted = "Customer is successfully deleted";
