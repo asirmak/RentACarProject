@@ -1,8 +1,8 @@
 ﻿using Business.Abstract;
-using Business.BusinessAsoects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Logging;
+using Core.Aspects.Autofac.Security;
 using Core.Aspects.Autofac.Validation;
 using Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using Core.CrossCuttingConcerns.Validation;
