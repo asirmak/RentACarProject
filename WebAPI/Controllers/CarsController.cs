@@ -2,6 +2,7 @@
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace WebAPI.Controllers
 {
@@ -72,10 +73,32 @@ namespace WebAPI.Controllers
             else return BadRequest(result);
         }
 
+        [HttpGet("getalldetailsbybrandid")]
+        public IActionResult GetAllCarDetailsByBrandId(int id)
+        {
+            var result = _carService.GetAllCarDetailsByBrandId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else return BadRequest(result);
+        }
+
         [HttpGet("getbybrandid")]
         public IActionResult GetByBrandId(int id)
         {
             var result = _carService.GetCarsByBrandId(id);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else return BadRequest(result);
+        }
+
+        [HttpGet("getalldetailsbycolorid")]
+        public IActionResult GetAllCarDetailsByColorId(int id)
+        {
+            var result = _carService.GetAllCarDetailsByColorId(id);
             if (result.Success)
             {
                 return Ok(result);

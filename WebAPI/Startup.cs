@@ -1,4 +1,4 @@
-using Business.Abstract;
+﻿using Business.Abstract;
 using Business.Concrete;
 using Core.Utilities.IoC;
 using Core.Utilities.Security.Encryption;
@@ -37,6 +37,8 @@ namespace WebAPI
         {
             services.AddControllers();
 
+            services.AddCors();
+
             var tokenOptions = Configuration.GetSection("TokenOptions").Get<TokenOptions>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -66,6 +68,8 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader()); // Required for cors
 
             app.UseHttpsRedirection();
 
