@@ -1,7 +1,7 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.CrossCuttingConcerns.Photos;
 using Core.Utilities.Business;
-using Core.Utilities.ImageHelper;
 using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
@@ -25,15 +25,22 @@ namespace Business.Concrete
 
         public IResult Add(CarImageDtoAdd carImageDto)
         {
+            string ImageUrl, ImagePublicId;
+
             IResult result = BusinessRules.Run(CheckIfNumberOfCarImagesExceeded(carImageDto));
             if (result != null)
             {
                return result;
             }
+
+            CloudinaryHelper.UploadImage(carImageDto.Image, out ImageUrl, out ImagePublicId);
+
             CarImage carImage = new CarImage();
+
             carImage.CarId = carImageDto.CarId;
             carImage.Date = DateTime.Now;
-            carImage.ImagePath = ImageHelper.AddImageToPath(carImageDto.Image, GlobalVariables.FilePath);
+            carImage.ImageUrl = ImageUrl;
+            carImage.ImagePublicId = ImagePublicId;
 
             _carImageDal.Add(carImage);
             return new SuccessResult(Messages.ImageAdded);
@@ -50,9 +57,16 @@ namespace Business.Concrete
 
         public IResult Delete(CarImage carImage)
         {
-            _carImageDal.Delete(carImage);
-            ImageHelper.DeleteImageFromPath(carImage.ImagePath);
-            return new SuccessResult(Messages.ImageDeleted);
+            if (CloudinaryHelper.DeleteImage(carImage.ImagePublicId))
+            {
+                _carImageDal.Delete(carImage);
+                return new SuccessResult(Messages.ImageDeleted);
+            }
+            else
+            {
+                return new ErrorResult();
+            }
+
         }
 
         public IDataResult<List<CarImage>> GetAll()
@@ -68,16 +82,23 @@ namespace Business.Concrete
 
         public IResult Update(CarImageDtoUpdate carImageDto)
         {
-            CarImage carImage = new CarImage();
-            carImage.Id = carImageDto.Id;
-            carImage.CarId = carImageDto.CarId;
+            string ImageUrl, ImagePublicId;
+
+            CloudinaryHelper.UploadImage(carImageDto.Image, out ImageUrl, out ImagePublicId);
+
+            CarImage carImage = GetById(carImageDto.Id).Data;
+
             carImage.Date = DateTime.Now;
-            ImageHelper.DeleteImageFromPath(carImage.ImagePath);
-            carImage.ImagePath = ImageHelper.AddImageToPath(carImageDto.Image, GlobalVariables.FilePath);
+            carImage.ImageUrl = ImageUrl;
+            carImage.ImagePublicId = ImagePublicId;
 
             _carImageDal.Update(carImage);
-
             return new SuccessResult(Messages.ImageUpdated);
+        }
+
+        public IDataResult<List<CarImage>> GetAllByCarId(int carId)
+        {
+            return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll(i => i.CarId == carId), Messages.ImagesListed);
         }
     }
 }

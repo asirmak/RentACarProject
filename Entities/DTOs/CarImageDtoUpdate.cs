@@ -9,6 +9,5 @@ namespace Entities.DTOs
     {
         public int Id { get; set; }
         public IFormFile Image { get; set; }
-        public int CarId { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotenv.net;
 
 namespace WebAPI
 {
@@ -16,6 +17,7 @@ namespace WebAPI
     {
         public static void Main(string[] args)
         {
+            DotEnv.Load(options: new DotEnvOptions(probeForEnv: true));
             CreateHostBuilder(args).Build().Run();
         }
 
