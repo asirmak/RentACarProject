@@ -22,9 +22,9 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var carToRent = _rentalDal.Get(r=>r.CarId == rental.CarId && r.ReturnDate == null);
+            var carToRent = _rentalDal.Get(r=>r.CarId == rental.CarId && r.ReturnDate > DateTime.Today);
 
-            if (carToRent != null)
+            if (carToRent != null && carToRent?.ReturnDate > rental.RentDate)
             {
                 return new ErrorResult(Messages.RentalInvalid);
             }
