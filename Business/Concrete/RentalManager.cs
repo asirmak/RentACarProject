@@ -4,6 +4,7 @@ using Core.Utilities.Results.Abstract;
 using Core.Utilities.Results.Concrete;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,11 +23,20 @@ namespace Business.Concrete
 
         public IResult Add(Rental rental)
         {
-            var carToRent = _rentalDal.Get(r=>r.CarId == rental.CarId && r.ReturnDate > DateTime.Today);
+            var carRentHistory = _rentalDal.GetAll(r=>r.CarId == rental.CarId && r.ReturnDate >= DateTime.Today);
 
-            if (carToRent != null && carToRent?.ReturnDate > rental.RentDate)
+            if (carRentHistory != null)
             {
-                return new ErrorResult(Messages.RentalInvalid);
+                foreach (var carToRent in carRentHistory)
+                {
+                    if (carToRent.ReturnDate >= rental.RentDate)
+                    {
+                        return new ErrorResult(Messages.RentalInvalid);
+                    }
+                }
+
+                _rentalDal.Add(rental);
+                return new SuccessResult(Messages.RentalAdded);
             }
             else
             {
