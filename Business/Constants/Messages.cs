@@ -31,8 +31,8 @@ namespace Business.Constants
         public static string UserUpdated = "User is successfully updated";
         public static string UsersListed = "Users are listed.";
         public static string UserRegistered = "User is registered";
-        public static User UserNotFound;
-        public static User PasswordError;
+        public static string UserNotFound = "User is not found!";
+        public static string PasswordError = "Password is wrong!";
         public static string SuccessfulLogin = "Logged in successfully.";
         public static string UserAlreadyExists = "User Already Exists";
         public static string AccessTokenCreated = "Access Token is created";
