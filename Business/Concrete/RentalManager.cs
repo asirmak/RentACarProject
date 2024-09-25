@@ -30,7 +30,7 @@ namespace Business.Concrete
             {
                 foreach (var carToRent in carRentHistory)
                 {
-                    if (carToRent.ReturnDate >= rental.RentDate)
+                    if (carToRent.ReturnDate >= rental.RentDate && carToRent.RentDate <= rental.RentDate)
                     {
                         return new ErrorResult(Messages.RentalInvalid);
                     }
@@ -55,6 +55,16 @@ namespace Business.Concrete
         public IDataResult<List<Rental>> GetAll()
         {
             return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(), Messages.RentalsListed);
+        }
+
+        public IDataResult<List<Rental>> GetAllByCarId(int carId)
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r=> r.CarId == carId), Messages.RentalsListed);
+        }
+
+        public IDataResult<List<Rental>> GetAllByRentalDate(DateTime rentDate, DateTime returnDate)
+        {
+            return new SuccessDataResult<List<Rental>>(_rentalDal.GetAll(r=> r.ReturnDate > rentDate && r.RentDate < returnDate));
         }
 
         public IDataResult<Rental> GetById(int rentalId)

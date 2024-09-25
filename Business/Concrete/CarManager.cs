@@ -16,6 +16,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using ValidationException = FluentValidation.ValidationException;
@@ -25,10 +26,12 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
+        IRentalService _rentalService;
 
-        public CarManager(ICarDal carDal)
+        public CarManager(ICarDal carDal, IRentalService rentalService)
         {
             _carDal = carDal;
+            _rentalService = rentalService;
         }
 
         [SecuredOperation("car.add, admin")]
@@ -88,6 +91,13 @@ namespace Business.Concrete
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
+        }
+
+        public IDataResult<List<CarDetailsDto>> GetAllCarsDetailByRentalDate(DateTime rentDate, DateTime returnDate)
+        {
+            List<int> carsInPeriod = _rentalService.GetAllByRentalDate(rentDate, returnDate).Data.Select(r=> r.CarId).Distinct().ToList();
+
+            return new SuccessDataResult<List<CarDetailsDto>>(_carDal.GetCarDetails(c=> !carsInPeriod.Contains(c.CarId)));
         }
     }
 }

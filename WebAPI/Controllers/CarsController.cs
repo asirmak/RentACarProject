@@ -2,6 +2,8 @@
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using System;
 using System.Threading;
 
 namespace WebAPI.Controllers
@@ -126,6 +128,20 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             else return BadRequest(result);
+        }
+
+        [HttpGet("getallcarsdetailsbyrentaldate")]
+        public IActionResult GetAllCarsDetailByRentalDate(DateTime rentDate, DateTime returnDate)
+        {
+            var result = _carService.GetAllCarsDetailByRentalDate(rentDate, returnDate);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(result);
+            }
         }
 
         [HttpPut("update")]
